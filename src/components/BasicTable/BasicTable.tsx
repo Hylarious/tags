@@ -1,16 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TablePagination,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Paper, Table, TableContainer } from "@mui/material";
 import { useState } from "react";
 import TableHeader from "../TableHeader/TableHeader";
 import { Order, Value } from "../../types";
@@ -19,7 +7,8 @@ import React, { useEffect } from "react";
 import { getError, getTags, loadTagsRequest } from "../../redux/tagsRedux";
 import { AppDispatch } from "../../redux/store";
 import { useSelector } from "react-redux";
-
+import PageHeader from "../PageHeader/PageHeader";
+import TagTableBody from "../TagTableBody/TagTableBody";
 
 const BasicTable = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -60,7 +49,7 @@ const BasicTable = () => {
       valueToOrderBy === property && orderDirection === "desc";
     setValueToOrderBy(property);
     setOrderDirection(isDesc ? "asc" : "desc");
-    setPage(0)
+    setPage(0);
   };
 
   return (
@@ -72,33 +61,12 @@ const BasicTable = () => {
         marginTop: 4,
       }}
     >
-      <Stack
-        spacing={{ xs: 1, sm: 2 }}
-        px={1}
-        direction="row"
-        useFlexGap
-        flexWrap="wrap"
-      >
-        <Typography
-          variant="h4"
-          component="a"
-          href="/"
-          sx={{ flexGrow: 2, color: "inherit", textDecoration: "none" }}
-        >
-          Stack Exchange Tags
-        </Typography>
-        <Box>
-          <TablePagination
-            component="div"
-            page={page}
-            rowsPerPageOptions={[10, 25, 50]}
-            count={-1}
-            rowsPerPage={rowsPerPage}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Box>
-      </Stack>
+      <PageHeader
+        page={page}
+        rowsPerPage={rowsPerPage}
+        handleChangePage={handleChangePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
+      />
       <TableContainer sx={{ maxHeight: "80vh" }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHeader
@@ -106,41 +74,7 @@ const BasicTable = () => {
             orderDirection={orderDirection}
             handleRequestSort={handleRequestSort}
           />
-          <TableBody>
-            {errorStatus?.success ? (
-              tagItems.map((tag) => (
-                <TableRow key={tag.name} hover>
-                  <TableCell>{tag.name}</TableCell>
-                  <TableCell>{tag.count}</TableCell>
-                </TableRow>
-              ))
-            ) : errorStatus?.pending ? (
-              <TableRow>
-                <TableCell colSpan={2}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <CircularProgress />
-                  </Box>
-                </TableCell>
-              </TableRow>
-            ) : (
-              <TableRow>
-                <TableCell colSpan={2}>
-                  <Box
-                    component="section"
-                    sx={{ p: 2, display: "flex", justifyContent: "center" }}
-                  >
-                    Sorry! {`${errorStatus?.error}`}
-                  </Box>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
+          <TagTableBody errorStatus={errorStatus} tagItems={tagItems} />
         </Table>
       </TableContainer>
     </Paper>

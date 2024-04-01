@@ -5,8 +5,8 @@ import axios from "axios";
 import { ThunkAction } from "redux-thunk";
 
 
-export const getTags = ({tags}: tagsInitialState) => tags
-export const getError = ({request}: tagsInitialState) => request
+export const getTags = ({ tags }: tagsInitialState) => tags
+export const getError = ({ request }: tagsInitialState) => request
 
 const reducerName = 'tags';
 const createActionName = (name: string) => `app/${reducerName}/${name}`;
@@ -26,11 +26,11 @@ export const errorRequest = (payload: Object) => ({ payload, type: ERROR_REQUEST
 export const loadTags = (payload: Tag[]) => ({ payload, type: LOAD_TAGS })
 
 
-export const loadTagsRequest = (page: number, pageSize: number, order: Order, sort: Value, ): ThunkAction<void, tagsInitialState, undefined, Action> => {
+export const loadTagsRequest = (page: number, pageSize: number, order: Order, sort: Value,): ThunkAction<void, tagsInitialState, undefined, Action> => {
   return async (dispatch: Dispatch<any>) => {
     dispatch(startRequest());
     try {
-      let res = await axios.get(`https://api.stackexchange.com/2.3/tags?page=${page+1}&pagesize=${pageSize}&order=${order}&sort=${sort}&site=stackoverflow`, {headers: {"Access-Control-Allow-Origin": "*"}})
+      let res = await axios.get(`https://api.stackexchange.com/2.3/tags?page=${page + 1}&pagesize=${pageSize}&order=${order}&sort=${sort}&site=stackoverflow`, { headers: { "Access-Control-Allow-Origin": "*" } })
       dispatch(loadTags(res.data.items))
       dispatch(endRequest())
     } catch (e) {
