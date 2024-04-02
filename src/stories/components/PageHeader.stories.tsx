@@ -4,6 +4,7 @@ import PageHeader from "../../components/PageHeader/PageHeader";
 const meta: Meta<typeof PageHeader> = {
   title: "Components/PageHeader",
   component: PageHeader,
+  tags: ["autodocs"],
   argTypes: {
     page: {
       control: { type: "number", min: 0 },
